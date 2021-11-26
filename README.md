@@ -60,3 +60,103 @@ const styleOptions = {
 
 <Webchat directLine=directLine styleOptions=styleOptions />
 ```
+
+## EXAMPLE
+```
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <title>Example</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script crossorigin="anonymous" src="https://unpkg.com/@babel/standalone@7.8.7/babel.min.js"></script>
+    <script crossorigin="anonymous" src="https://unpkg.com/react@16.8.6/umd/react.development.js"></script>
+    <script crossorigin="anonymous" src="https://unpkg.com/react-dom@16.8.6/umd/react-dom.development.js"></script>
+    <script crossorigin="anonymous" src="https://cdn.botframework.com/botframework-webchat/latest/webchat.js"></script>
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        #webchat {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            height: 100%;
+            margin: auto;
+            max-width: 480px;
+            min-width: 360px;
+        }
+
+        .app__journey1 {
+            left: 10px;
+            position: absolute;
+            top: 10px;
+        }
+
+        .app__journey2 {
+            left: 10px;
+            position: absolute;
+            top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div id="webchat" role="main"></div>
+    <script type="text/babel" data-presets="env,stage-3,react">
+        (async function() {
+          const {
+            React: { useCallback, useEffect },
+            WebChat: {
+              Components: { BasicWebChat, Composer },
+              createDirectLine,
+              hooks: { useFocus, useSendEvent }
+            }
+          } = window;
+
+          const res = await fetch('https://wellness-ai-functions.azurewebsites.net/api/token', { method: 'GET' });
+          const { token } = await res.json();
+          
+          //FOR TESTING USE A HARDCODED SECRET VALUE
+          //const directLine = createDirectLine({ token: '<SECRET>' });
+
+          const SendJ1Button = () => {
+            const sendEvent = useSendEvent();
+
+            const handleJ1ButtonClick = useCallback(() => sendEvent('API_Activity_Tracker', {userId: "f6534d08-eb4f-44b2-b5ed-aba6ae226284", product:"pants"}), [sendEvent]);
+
+            return (
+              <button className="app__journey1" onClick={handleJ1ButtonClick} type="button">
+                Journey 1 event
+              </button>
+            );
+          };
+
+          const SendJ2Button = () => {
+            const sendMessage = useSendMessage();
+            const sendEvent = useSendEvent();
+
+            const handleJ2ButtonClick = useCallback(() => sendEvent('journey2', {userID: "f6534d08-eb4f-44b2-b5ed-aba6ae226284", product:"pants"}), [sendEvent]);
+
+            return (
+              <button className="app__journey2" onClick={handleJ2ButtonClick} type="button">
+                Journey 2 event
+              </button>
+            );
+          };
+
+          ReactDOM.render(
+            <Composer directLine={directLine}>
+              <BasicWebChat />
+              <SendJ1Button />
+              <SendJ2Button />
+            </Composer>,
+            document.getElementById('webchat')
+          );
+        })().catch(err => console.error(err));
+    </script>
+</body>
+</html>
+```
