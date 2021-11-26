@@ -20,7 +20,9 @@ const { token } = await res.json();
 
 ## In Your Implementation
 In the BotFramework-WebChat SDK you will pass the `token` value above to the `createDirectLine()` function, as below:
-`const  directLine = createDirectLine({ token });`
+```
+const  directLine = createDirectLine({ token });
+```
 
 The `directLine` const from above is then passed as a prop to either your `Composer` component, or the `WebChat` - depending on your integration.
 
