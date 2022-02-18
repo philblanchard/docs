@@ -3,7 +3,7 @@
 
 The following is a sample, but usable, app designed to be used as an Azure Serverless Function.
 
-The app is written in GO and uses the GIN Web Framework - who doesn't like Gin!
+The app is written in GO and uses the GIN Web Framework!
 https://docs.microsoft.com/en-us/azure/azure-functions/create-first-function-vs-code-other?tabs=go%2Cmacos
 ## main 
 
